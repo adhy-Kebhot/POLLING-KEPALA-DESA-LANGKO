@@ -4,273 +4,335 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Polling Kepala Desa Langko</title>
-
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #f4f6f8;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #eef7f3, #f8faf9);
       color: #222;
+      min-height: 100vh;
+      padding: 24px 12px;
     }
 
     .container {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 20px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .card {
-      background: white;
-      border-radius: 18px;
-      padding: 30px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+      background: #fff;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 10px 35px rgba(0,0,0,.10);
     }
 
     h1 {
       text-align: center;
       color: #087f5b;
-      margin-bottom: 10px;
+      font-size: clamp(24px, 5vw, 34px);
+      margin-bottom: 8px;
     }
 
     .subtitle {
       text-align: center;
       color: #666;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
+      line-height: 1.5;
+    }
+
+    .candidates {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
     }
 
     .candidate {
-      border: 2px solid #ddd;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 15px;
+      position: relative;
+      display: block;
+      border: 2px solid #e1e6e3;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
       cursor: pointer;
-      transition: 0.2s;
+      transition: .2s ease;
     }
 
     .candidate:hover {
+      transform: translateY(-2px);
       border-color: #087f5b;
-      background: #f0fff9;
+      box-shadow: 0 8px 22px rgba(8,127,91,.12);
     }
 
     .candidate input {
-      margin-right: 10px;
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .candidate:has(input:checked) {
+      border-color: #087f5b;
+      box-shadow: 0 0 0 3px rgba(8,127,91,.15);
+      background: #f1fff9;
+    }
+
+    .photo-wrap {
+      width: 100%;
+      height: 320px;
+      background: #f1f3f4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .candidate-info {
+      padding: 16px;
+      text-align: center;
+    }
+
+    .number {
+      display: inline-block;
+      background: #087f5b;
+      color: white;
+      font-size: 13px;
+      font-weight: bold;
+      padding: 5px 11px;
+      border-radius: 999px;
+      margin-bottom: 8px;
     }
 
     .candidate-name {
-      font-size: 18px;
-      font-weight: bold;
+      display: block;
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+    }
+
+    .select-text {
+      margin-top: 8px;
+      color: #777;
+      font-size: 14px;
     }
 
     button {
       width: 100%;
-      padding: 15px;
+      padding: 16px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #087f5b;
-      color: white;
+      color: #fff;
       font-size: 18px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
-      margin-top: 15px;
+      margin-top: 22px;
     }
 
-    button:hover {
-      background: #066b4c;
-    }
+    button:hover { background: #066b4c; }
 
     .result {
       margin-top: 30px;
+      padding-top: 24px;
+      border-top: 1px solid #e5e5e5;
     }
 
     .result h2 {
-      margin-bottom: 15px;
+      margin-bottom: 18px;
       color: #087f5b;
+      text-align: center;
     }
 
-    .result-item {
-      margin-bottom: 15px;
+    .result-item { margin-bottom: 18px; }
+
+    .result-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
     .bar {
       width: 100%;
-      height: 25px;
-      background: #e5e5e5;
-      border-radius: 20px;
+      height: 24px;
+      background: #e7ebe9;
+      border-radius: 999px;
       overflow: hidden;
-      margin-top: 5px;
     }
 
     .fill {
       height: 100%;
       background: #087f5b;
       width: 0%;
-      transition: width 0.5s;
+      transition: width .5s ease;
     }
 
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
 
     .footer {
       text-align: center;
-      margin-top: 25px;
+      margin-top: 22px;
       color: #777;
       font-size: 13px;
+    }
+
+    @media (max-width: 680px) {
+      .card { padding: 18px; }
+      .candidates { grid-template-columns: 1fr; }
+      .photo-wrap { height: 360px; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="container">
-
     <div class="card">
-
-      <h1>POLING KEPALA DESA LANGKO</h1>
-
-      <p class="subtitle">
-        Silakan pilih calon Kepala Desa pilihan Anda
-      </p>
+      <h1>POLLING KEPALA DESA LANGKO</h1>
+      <p class="subtitle">Silakan pilih calon Kepala Desa pilihan Anda</p>
 
       <form id="pollForm">
+        <div class="candidates">
 
-        <label class="candidate">
-          <input type="radio" name="candidate" value="Calon 1">
-          <span class="candidate-name">Calon 1</span>
-        </label>
+          <label class="candidate">
+            <input type="radio" name="candidate" value="KETOK (HUZAIRI)">
+            <div class="photo-wrap">
+              <img src="kandidat-1.jpg" alt="KETOK (HUZAIRI)">
+            </div>
+            <div class="candidate-info">
+              <span class="number">KANDIDAT 1</span>
+              <span class="candidate-name">KETOK (HUZAIRI)</span>
+              <div class="select-text">Klik untuk memilih</div>
+            </div>
+          </label>
 
-        <label class="candidate">
-          <input type="radio" name="candidate" value="Calon 2">
-          <span class="candidate-name">Calon 2</span>
-        </label>
+          <label class="candidate">
+            <input type="radio" name="candidate" value="ZULKARNAIN, S.Sos">
+            <div class="photo-wrap">
+              <img src="kandidat-2.jpg" alt="ZULKARNAIN, S.Sos">
+            </div>
+            <div class="candidate-info">
+              <span class="number">KANDIDAT 2</span>
+              <span class="candidate-name">ZULKARNAIN, S.Sos</span>
+              <div class="select-text">Klik untuk memilih</div>
+            </div>
+          </label>
 
-        <label class="candidate">
-          <input type="radio" name="candidate" value="Calon 3">
-          <span class="candidate-name">Calon 3</span>
-        </label>
+          <label class="candidate">
+            <input type="radio" name="candidate" value="H. ARJUNA">
+            <div class="photo-wrap">
+              <img src="kandidat-3.png" alt="H. ARJUNA">
+            </div>
+            <div class="candidate-info">
+              <span class="number">KANDIDAT 3</span>
+              <span class="candidate-name">H. ARJUNA</span>
+              <div class="select-text">Klik untuk memilih</div>
+            </div>
+          </label>
 
-        <label class="candidate">
-          <input type="radio" name="candidate" value="Calon 4">
-          <span class="candidate-name">Calon 4</span>
-        </label>
+          <label class="candidate">
+            <input type="radio" name="candidate" value="MAWARDI, S.H">
+            <div class="photo-wrap">
+              <img src="kandidat-4.png" alt="MAWARDI, S.H">
+            </div>
+            <div class="candidate-info">
+              <span class="number">KANDIDAT 4</span>
+              <span class="candidate-name">MAWARDI, S.H</span>
+              <div class="select-text">Klik untuk memilih</div>
+            </div>
+          </label>
 
-        <button type="submit">
-          KIRIM PILIHAN
-        </button>
+        </div>
 
+        <button type="submit">KIRIM PILIHAN</button>
       </form>
 
       <div id="result" class="result hidden">
-
         <h2>Hasil Polling</h2>
 
         <div class="result-item">
-          <strong>Calon 1</strong>
-          <span id="count1">0 suara</span>
-          <div class="bar">
-            <div id="bar1" class="fill"></div>
+          <div class="result-label">
+            <strong>KETOK (HUZAIRI)</strong><span id="count1">0 suara</span>
           </div>
+          <div class="bar"><div id="bar1" class="fill"></div></div>
         </div>
 
         <div class="result-item">
-          <strong>Calon 2</strong>
-          <span id="count2">0 suara</span>
-          <div class="bar">
-            <div id="bar2" class="fill"></div>
+          <div class="result-label">
+            <strong>ZULKARNAIN, S.Sos</strong><span id="count2">0 suara</span>
           </div>
+          <div class="bar"><div id="bar2" class="fill"></div></div>
         </div>
 
         <div class="result-item">
-          <strong>Calon 3</strong>
-          <span id="count3">0 suara</span>
-          <div class="bar">
-            <div id="bar3" class="fill"></div>
+          <div class="result-label">
+            <strong>H. ARJUNA</strong><span id="count3">0 suara</span>
           </div>
+          <div class="bar"><div id="bar3" class="fill"></div></div>
         </div>
 
         <div class="result-item">
-          <strong>Calon 4</strong>
-          <span id="count4">0 suara</span>
-          <div class="bar">
-            <div id="bar4" class="fill"></div>
+          <div class="result-label">
+            <strong>MAWARDI, S.H</strong><span id="count4">0 suara</span>
           </div>
+          <div class="bar"><div id="bar4" class="fill"></div></div>
         </div>
-
       </div>
 
-      <div class="footer">
-        Polling Kepala Desa Langko
-      </div>
-
+      <div class="footer">Polling Kepala Desa Langko</div>
     </div>
-
   </div>
 
   <script>
-
-    let votes = {
-      "Calon 1": 0,
-      "Calon 2": 0,
-      "Calon 3": 0,
-      "Calon 4": 0
+    const votes = {
+      "KETOK (HUZAIRI)": 0,
+      "ZULKARNAIN, S.Sos": 0,
+      "H. ARJUNA": 0,
+      "MAWARDI, S.H": 0
     };
 
-    document
-      .getElementById("pollForm")
-      .addEventListener("submit", function(event) {
+    const candidates = [
+      "KETOK (HUZAIRI)",
+      "ZULKARNAIN, S.Sos",
+      "H. ARJUNA",
+      "MAWARDI, S.H"
+    ];
 
-        event.preventDefault();
+    document.getElementById("pollForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-        const selected = document.querySelector(
-          'input[name="candidate"]:checked'
-        );
+      const selected = document.querySelector('input[name="candidate"]:checked');
 
-        if (!selected) {
-          alert("Silakan pilih calon terlebih dahulu.");
-          return;
-        }
+      if (!selected) {
+        alert("Silakan pilih calon terlebih dahulu.");
+        return;
+      }
 
-        votes[selected.value]++;
+      votes[selected.value]++;
+      updateResults();
+      document.getElementById("result").classList.remove("hidden");
 
-        updateResults();
-
-        document.getElementById("result")
-          .classList.remove("hidden");
-
-        alert("Terima kasih, pilihan Anda sudah tercatat.");
-
-      });
+      alert("Terima kasih, pilihan Anda sudah tercatat.");
+    });
 
     function updateResults() {
+      const total = candidates.reduce((sum, name) => sum + votes[name], 0);
 
-      const total =
-        votes["Calon 1"] +
-        votes["Calon 2"] +
-        votes["Calon 3"] +
-        votes["Calon 4"];
-
-      for (let i = 1; i <= 4; i++) {
-
-        const name = "Calon " + i;
+      candidates.forEach((name, index) => {
+        const number = index + 1;
         const count = votes[name];
+        const percentage = total === 0 ? 0 : (count / total) * 100;
 
-        document.getElementById("count" + i)
-          .textContent = count + " suara";
-
-        const percentage =
-          total === 0 ? 0 : (count / total) * 100;
-
-        document.getElementById("bar" + i)
-          .style.width = percentage + "%";
-      }
+        document.getElementById("count" + number).textContent = count + " suara";
+        document.getElementById("bar" + number).style.width = percentage + "%";
+      });
     }
-
   </script>
-
 </body>
 </html>
