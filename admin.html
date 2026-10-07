@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin - Polling Kepala Desa Langko</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 35px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.10);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 24px;
+            color: #222;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin: 8px 0 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 18px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: #111;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        #message {
+            margin-top: 18px;
+            text-align: center;
+            color: #d00;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">🗳️</div>
+
+    <h1>POLING KEPALA DESA</h1>
+
+    <div class="subtitle">
+        LANGKO
+    </div>
+
+    <form id="loginForm">
+
+        <label for="email">
+            Email Admin
+        </label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Masukkan email admin"
+            required
+        >
+
+        <label for="password">
+            Password
+        </label>
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Masukkan password"
+            required
+        >
+
+        <button type="submit">
+            MASUK
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+
+<script type="module">
+
+    import {
+        createClient
+    } from "https://esm.sh/@supabase/supabase-js@2";
+
+
+    // ==========================================
+    // MASUKKAN DATA SUPABASE ANDA DI SINI
+    // ==========================================
+
+    const SUPABASE_URL =
+        "https://jfheauuuzgpgfwqyrhlt.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_eJ0zRhBcEFec37rIdytwWw_BZRXjJul";
+
+
+    const supabase =
+        createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    // ==========================================
+    // LOGIN ADMIN
+    // ==========================================
+
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const message =
+        document.getElementById("message");
+
+
+    loginForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById("email").value.trim();
+
+            const password =
+                document.getElementById("password").value;
+
+
+            message.textContent =
+                "Sedang masuk...";
+
+
+            const {
+                data,
+                error
+            } = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+
+            if (error) {
+
+                message.textContent =
+                    "Email atau password salah.";
+
+                return;
+            }
+
+
+            // ======================================
+            // CEK APAKAH USER TERDAFTAR SEBAGAI ADMIN
+            // ======================================
+
+            const {
+                data: adminData,
+                error: adminError
+            } = await supabase
+                .from("admin_users")
+                .select("user_id")
+                .eq("user_id", data.user.id)
+                .maybeSingle();
+
+
+            if (adminError || !adminData) {
+
+                await supabase.auth.signOut();
+
+                message.textContent =
+                    "Akun ini bukan akun admin.";
+
+                return;
+            }
+
+
+            // ======================================
+            // LOGIN BERHASIL
+            // ======================================
+
+            window.location.href =
+                "dashboard.html";
+
+        });
+
+</script>
+
+</body>
+</html>
